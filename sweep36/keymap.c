@@ -1,15 +1,26 @@
 #include QMK_KEYBOARD_H
-#include keymap_danish.h
+
+#include "keymap_danish.h"
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
     _NORTO,
+    -NAVNUM,
+    _SYM,
     _QWERTY,
     _COLEMAK,
     _LOWER,
     _RAISE,
     _ADJUST
 };
+
+// Define aliases
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
+#define NORTO MO(_NORTO)
+#define SYM MO(_SYM)
+#define NAVNUM MO(_NAVNUM)
+#define MOUSE MO(_MOUSE)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -29,12 +40,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // 
 [_NORTO] = LAYOUT_split_3x5_3(
-  DK_OE,  DK_AE,      KC_U,   KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
-  KC_O,     KC_I,     KC_A,   KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
-  KC_Y,     DK_AA,  KC_V,     KC_C,     KC_DOT,   KC_COMM   KC_W,     KC_K,   KC_Z,   KC_Q,
-                      LOWER,  KC_BSPC,  KC_E,     KC_PC,    KC_LSFT,  RAISE
+  DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
+  KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
+  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
+                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
 ),
 
+/* NAV and Numbers
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |      | PGUP |  UP  | HOME |      |           |      |   1  |   2  |   3  |      |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |      | LEFT | DOWN | RIGHT|      |           |      |   4  |   5  |   6  |      |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |      | PGDWN|      | END  |      |           |      |   7  |   8  |   9  |      |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
+ *                  `--------------------'    `--------------------.
+ */
+
+// 
+[_NAVNUM] = LAYOUT_split_3x5_3(
+  DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
+  KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
+  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
+                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
+),
+/* Norto https://lykt.xyz/skl/norto/#da
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   Ø  |   Æ  |   U  |   G  |   J  |           |   B  |   F  |   L  |   H  |   X  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   O  |   I  |   A  |   T  |   M  |           |   P  |   N  |   R  |   S  |   D  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |      |   Y  |   Å  |   V  |   C  |           |   W  |   K  |   Z  |   Q  |      |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
+ *                  `--------------------'    `--------------------.
+ */
+
+// 
+[_NORTO] = LAYOUT_split_3x5_3(
+  DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
+  KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
+  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
+                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
+),
 /* Qwerty
  *
  * ,----------------------------------.           ,----------------------------------.
