@@ -36,35 +36,6 @@
     { F0, F1, C7, NO_PIN, NO_PIN } \
 }
 
-/*
-#define DIRECT_PINS_RIGHT { \
-    { B5, F7, F6, F5, F4 }, \
-    { B4, D4, C6, D7, E6 }, \
-    { B3, B2, B6, B7, D5 }, \
-    { F0, F1, C7, NO_PIN, NO_PIN } \
-}
-*/
-
-#define RGB_DI_PIN D3
-#ifdef RGBLIGHT_ENABLE
-  #define RGBLED_NUM 36
-  #define RGBLED_SPLIT {18, 18}
-  #define RGBLIGHT_HUE_STEP 16
-  #define RGBLIGHT_SAT_STEP 16
-  #define RGBLIGHT_VAL_STEP 16
-  #define RGBLIGHT_LIMIT_VAL 150 /* The maximum brightness level for RGBLIGHT_ENABLE */
-  #define RGBLIGHT_SLEEP  /* If defined, the RGB lighting will be switched off when the host goes to sleep */
-  #define RGBLIGHT_EFFECT_ALTERNATING
-  #define RGBLIGHT_EFFECT_BREATHING
-  #define RGBLIGHT_EFFECT_CHRISTMAS
-  #define RGBLIGHT_EFFECT_KNIGHT
-  #define RGBLIGHT_EFFECT_RAINBOW_MOOD
-  #define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-  #define RGBLIGHT_EFFECT_SNAKE
-  #define RGBLIGHT_EFFECT_STATIC_GRADIENT
-  #define RGBLIGHT_EFFECT_TWINKLE
-#endif
-
 #ifdef OLED_ENABLE
 #define OLED_DISPLAY_128X32
 #endif
@@ -89,7 +60,7 @@
 #define ENCODERS_PAD_B_RIGHT {D0}
 #endif
 
-#define EE_HANDS
+#define MASTER_LEFT
 
 /* Backwards compatibility with existing out-of-tree keymaps */
 #define LAYOUT_sweeeeep LAYOUT_split_3x5_3

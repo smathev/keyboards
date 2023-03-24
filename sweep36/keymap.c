@@ -1,99 +1,148 @@
-/* Copyright 2021 Sadek Baroudi
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#include "sadekbaroudi.h"
-#include "casemodes.h"
 #include QMK_KEYBOARD_H
+#include keymap_danish.h
 
-/*
- * The `LAYOUT_sweeeeep_base` macro is a template to allow the use of identical
- * modifiers for the default layouts (eg ALPHA_ALT, Colemak, Dvorak, etc), so
- * that there is no need to set them up for each layout, and modify all of
- * them if I want to change them.  This helps to keep consistency and ease
- * of use. K## is a placeholder to pass through the individual keycodes
- */
-
-// clang-format off
-#define LAYOUT_sweeeeep_base( \
-    K01, K02, K03, K04, K05, K06, K07, K08, K09, K0A, \
-    K11, K12, K13, K14, K15, K16, K17, K18, K19, K1A, \
-    K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A, \
-              K33, K34, K35, K36, K37, K38 \
-  ) \
-  LAYOUT_wrapper( \
-        K01,            K02,            K03,            LT(_FUNCTION, K04), K05,                K06,                LT(_FUNCTION, K07), K08,              K09,            K0A, \
-        LCTL_T(K11),    LGUI_T(K12),    LALT_T(K13),    LSFT_T(K14),        K15,                LT(_MOUSE, K16),    RSFT_T(K17),        RALT_T(K18),      RGUI_T(K19),    RCTL_T(K1A), \
-        K21,            K22,            K23,            K24,                K25,                K26,                K27,                K28,              K29,            K2A, \
-                                        K33, LT(_NAVIGATION,K34), LT(_FUNCTION,K35),        LT(_MEDIA,K36),         LT(_SYMBOLS,K37),   K38 \
-    )
-
-/* Re-pass though to allow templates to be used */
-#define LAYOUT_sweeeeep_base_wrapper(...)       LAYOUT_sweeeeep_base(__VA_ARGS__)
+// Defines names for use in layer keycodes and the keymap
+enum layer_names {
+    _NORTO,
+    _QWERTY,
+    _COLEMAK,
+    _LOWER,
+    _RAISE,
+    _ADJUST
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [_ALPHA_ALT] = LAYOUT_sweeeeep_base_wrapper(
-        _________________ALPHA_ALT_L1_________________, _________________ALPHA_ALT_R1_________________,
-        _________________ALPHA_ALT_L2_________________, _________________ALPHA_ALT_R2_________________,
-        _________________ALPHA_ALT_L3_________________, _________________ALPHA_ALT_R3_________________,
-                                             __ALPHA_ALT_THUMBS_6__
-    ),
+/* Norto https://lykt.xyz/skl/norto/#da
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   Ø  |   Æ  |   U  |   G  |   J  |           |   B  |   F  |   L  |   H  |   X  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   O  |   I  |   A  |   T  |   M  |           |   P  |   N  |   R  |   S  |   D  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |      |   Y  |   Å  |   V  |   C  |           |   W  |   K  |   Z  |   Q  |      |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
+ *                  `--------------------'    `--------------------.
+ */
 
-    [_ALPHA] = LAYOUT_sweeeeep_base_wrapper(
-        __________________ALPHA_L1____________________, __________________ALPHA_R1____________________,
-        __________________ALPHA_L2____________________, __________________ALPHA_R2____________________,
-        __________________ALPHA_L3____________________, __________________ALPHA_R3____________________,
-                                              __ALPHA_THUMBS_6__
-    ),
+// 
+[_NORTO] = LAYOUT_split_3x5_3(
+  DK_OE,  DK_AE,      KC_U,   KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
+  KC_O,     KC_I,     KC_A,   KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
+  KC_Y,     DK_AA,  KC_V,     KC_C,     KC_DOT,   KC_COMM   KC_W,     KC_K,   KC_Z,   KC_Q,
+                      LOWER,  KC_BSPC,  KC_E,     KC_PC,    KC_LSFT,  RAISE
+),
 
-    [_NAVIGATION] = LAYOUT_wrapper(
-        ________________NAVIGATION_1_______________, _________________NUMPAD_1__________________,
-        ________________NAVIGATION_2_______________, _________________NUMPAD_2__________________,
-        ________________NAVIGATION_3_______________, _________________NUMPAD_3__________________,
-                           _______, _______, KC_TAB, KC_BSPC, KC_SPACE, KC_DOT
-    ),
+/* Qwerty
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   Q  |   W  |   E  |   R  |   T  |           |   Y  |   U  |   I  |   O  |   P  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   A  |   S  |   D  |   F  |   G  |           |   H  |   J  |   K  |   L  |   ;  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   Z  |   X  |   C  |   V  |   B  |           |   N  |   M  |   ,  |   .  |   /  |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
+ *                  `--------------------'    `--------------------.
+ */
 
-    [_SYMBOLS] = LAYOUT_wrapper(
-        ________________SYMBOLS_L1_________________, ________________SYMBOLS_R1_________________,
-        ________________SYMBOLS_L2_________________, ________________SYMBOLS_R2_________________,
-        ________________SYMBOLS_L3_________________, ________________SYMBOLS_R3_________________,
-                            _______, KC_ENT, KC_DEL, KC_BSPC, _______, _______
-    ),
+// Default config uses home row mods. So hold each of the keys on the home row to use ctrl, gui, alt, or shift
+[_QWERTY] = LAYOUT_split_3x5_3(
+  KC_Q,         KC_W,         KC_E,         KC_R,         KC_T,         KC_Y,    KC_U,         KC_I,         KC_O,         KC_P,
+  LCTL_T(KC_A), LGUI_T(KC_S), LALT_T(KC_D), LSFT_T(KC_F), KC_G,         KC_H,    RSFT_T(KC_J), RALT_T(KC_K), RGUI_T(KC_L), RCTL_T(KC_SCLN),
+  KC_Z,         KC_X,         KC_C,         KC_V,         KC_B,         KC_N,    KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,
+                              LOWER,        KC_ENT,       KC_QUOT,      KC_BSPC, KC_SPC,       RAISE
+),
 
-    [_FUNCTION] = LAYOUT_wrapper(
-        ________________SHIFTNAV_1_________________, ________________FUNCTION_1_________________,
-        ________________SHIFTNAV_2_________________, ________________FUNCTION_2_________________,
-        ________________SHIFTNAV_3_________________, ________________FUNCTION_3_________________,
-                          _______, _______, _______, N_DEL_LINE, KC_SPACE, _______
-    ),
+/* Colemak
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   Q  |   W  |   F  |   P  |   B  |           |   J  |   L  |   U  |   Y  |   ;  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   A  |   R  |   S  |   T  |   G  |           |   M  |   N  |   E  |   I  |   O  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |   Z  |   X  |   C  |   D  |   V  |           |   K  |   H  |   ,  |   .  |   /  |
+ * `-------------+--------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
+ *                  `--------------------'    `--------------------.
+ */
 
-    [_MEDIA] = LAYOUT_wrapper(
-        ___________________RGB_1___________________, _________________MACROS_1__________________,
-        ___________________RGB_2___________________, _________________MACROS_2__________________,
-        ___________________RGB_3___________________, _________________MACROS_3__________________,
-                          _______, _______, _______, _______, _______, _______
-    ),
-    
-    [_MOUSE] = LAYOUT_wrapper(
-        __________________MOUSE_1__________________, ___________________BLANK___________________,
-        __________________MOUSE_2__________________, ___________________BLANK___________________,
-        __________________MOUSE_3__________________, ___________________BLANK___________________,
-                    _______, KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN3, KC_MS_BTN2, _______
-    )
+// Default config uses home row mods. So hold each of the keys on the home row to use ctrl, gui, alt, or shift
+[_COLEMAK] = LAYOUT_split_3x5_3(
+  KC_Q,         KC_W,         KC_F,         KC_P,         KC_B,         KC_J,    KC_L,         KC_U,         KC_Y,         KC_SCLN,
+  LCTL_T(KC_A), LGUI_T(KC_R), LALT_T(KC_S), LSFT_T(KC_T), KC_G,         KC_M,    RSFT_T(KC_N), RALT_T(KC_E), RGUI_T(KC_I), RCTL_T(KC_O),
+  KC_Z,         KC_X,         KC_C,         KC_D,         KC_V,         KC_K,    KC_H,         KC_COMM,      KC_DOT,       KC_SLSH,
+                              LOWER,        KC_ENT,       KC_QUOT,      KC_BSPC, KC_SPC,       RAISE
+),
+
+/* Raise
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   1  |   2  |   3  |   4  |   5  |           |   6  |   7  |   8  |   9  |   0  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |  Left | Down |  Up  | Right| Tab |           |      |   -  |   =  |   [  |   ]  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |  Ctrl|   `  |  GUI |  Alt |      |           |      |      |      |   \  |   '  |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER|      |      |    |      |      | RAISE|
+ *                  `--------------------'    `--------------------.
+ */
+[_RAISE] = LAYOUT_split_3x5_3(
+  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
+  KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TAB,       _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC,
+  KC_LCTL, KC_GRV,  KC_LGUI, KC_LALT, _______,      _______, _______, _______, KC_BSLS, KC_QUOT,
+                    _______, _______, _______,      _______, _______, _______
+),
+
+/* Lower
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * |   !  |   @  |   #  |   $  |   %  |           |   ^  |   &  |   *  |   (  |   )  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |  Esc |      |      |      |      |           |      |   _  |   +  |   {  |   }  |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * |  Caps|   ~  |      |      |      |           |      |      |      |   |  |   "  |
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER|      |      |    |  Del |      | RAISE|
+ *                  `--------------------'    `--------------------.
+ */
+[_LOWER] = LAYOUT_split_3x5_3(
+  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
+  KC_ESC,  _______, _______, _______, _______,      _______, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR,
+  KC_CAPS, KC_TILD, _______, _______, _______,      _______, _______, _______, KC_PIPE,  KC_DQT,
+                    _______, _______, _______,      KC_DEL,  _______, _______
+),
+
+/* Adjust (Lower + Raise)
+ *
+ * ,----------------------------------.           ,----------------------------------.
+ * | RGB_T| RGB_R| RGB_F|      |NORTO |           |   F1 |  F2  |  F3  |  F4  |  F5 |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * | SPD_I| HUE_I| SAT_I| VAL_I|QWERTY|           |   F6 |  F7  |  F8  |  F9  |  F10 |
+ * |------+------+------+------+------|           |------+------+------+------+------|
+ * | SPD_D| HUE_D| SAT_D| VAL_D|COLEMK      |           |  F11 |  F12 |      |      | Reset|
+ * `----------------------------------'           `----------------------------------'
+ *                  ,--------------------.    ,--------------------.
+ *                  | LOWER|      |      |    |      |      | RAISE|
+ *                  `--------------------'    `--------------------.
+ */
+[_ADJUST] =  LAYOUT_split_3x5_3(
+  RGB_TOG, RGB_RMOD, RGB_MOD, _______, TO(_NORTO),       KC_F1,   KC_F2,   KC_F3,   KC_F4,    KC_F5,
+  RGB_SPI, RGB_HUI,  RGB_SAI, RGB_VAI, TO(_QWERTY),      KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,
+  RGB_SPD, RGB_HUD,  RGB_SAD, RGB_VAD, TO(_COLEMAK),     KC_F11,  KC_F12,  _______, _______,  QK_BOOT,
+                     _______, _______, _______,           _______, _______, _______
+)
 };
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
 
 #ifdef OLED_ENABLE
 
@@ -106,37 +155,37 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 static void render_logo(void) {
     // sweeeeep logo, 128x32px
     static const char PROGMEM sweeeeep_logo[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x20, 0x20, 0x20, 0xc0, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0xc0, 0x20, 0x18, 0x06, 0xc1, 0x20, 0x18, 0x06, 0x01, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x40, 0x20, 0x30, 0x50, 0x48, 0x88, 
-    0x08, 0x08, 0x06, 0x01, 0x20, 0xd8, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x30, 0x50, 0x48, 0x48, 0x44, 0xa2, 0x61, 0x11, 0x00, 0x00, 0x00, 0x80, 0x40, 0x00, 
-    0x01, 0x01, 0x02, 0x02, 0xc4, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x04, 0x04, 0x0c, 0x16, 0x23, 0x20, 0x20, 
-    0x18, 0x7e, 0x40, 0x78, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x20, 0x00, 0xc0, 
-    0x20, 0x20, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x84, 0x84, 0x83, 
-    0x00, 0x44, 0xe7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x19, 0x18, 0x16, 
-    0x06, 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0xc2, 0x01, 0xff, 
-    0x81, 0x42, 0x3e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x08, 0x04, 0xfc, 
-    0x04, 0x08, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x23, 0x10, 0xf3, 
-    0x12, 0x21, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x8c, 0x40, 0xcf, 
-    0x48, 0x84, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x30, 0x00, 0x3f, 
-    0x20, 0x10, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0xc2, 0x01, 0xff, 
-    0x81, 0x42, 0x3e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3e, 0x08, 0x08, 0xe8, 0x18, 0x08, 0x08, 
-    0x08, 0x18, 0xe6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x02, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x20, 0x20, 0x20, 0xc0, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0xc0, 0x20, 0x18, 0x06, 0xc1, 0x20, 0x18, 0x06, 0x01, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x40, 0x20, 0x30, 0x50, 0x48, 0x88,
+    0x08, 0x08, 0x06, 0x01, 0x20, 0xd8, 0x06, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x30, 0x50, 0x48, 0x48, 0x44, 0xa2, 0x61, 0x11, 0x00, 0x00, 0x00, 0x80, 0x40, 0x00,
+    0x01, 0x01, 0x02, 0x02, 0xc4, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x04, 0x04, 0x0c, 0x16, 0x23, 0x20, 0x20,
+    0x18, 0x7e, 0x40, 0x78, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x20, 0x00, 0xc0,
+    0x20, 0x20, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x84, 0x84, 0x83,
+    0x00, 0x44, 0xe7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x19, 0x18, 0x16,
+    0x06, 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0xc2, 0x01, 0xff,
+    0x81, 0x42, 0x3e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x08, 0x04, 0xfc,
+    0x04, 0x08, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x23, 0x10, 0xf3,
+    0x12, 0x21, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x8c, 0x40, 0xcf,
+    0x48, 0x84, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0x30, 0x00, 0x3f,
+    0x20, 0x10, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3c, 0xc2, 0x01, 0xff,
+    0x81, 0x42, 0x3e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3e, 0x08, 0x08, 0xe8, 0x18, 0x08, 0x08,
+    0x08, 0x18, 0xe6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x02,
     0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 };
