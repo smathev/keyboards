@@ -34,11 +34,13 @@ SPLIT_KEYBOARD = yes        # Use shared split_common code
 LAYOUTS = split_3x5_3       # Community layout support
 
 DEFERRED_EXEC_ENABLE = yes
-SRC +=  keyboards/fingerpunch/fp.c \
-        keyboards/fingerpunch/fp_haptic.c \
-        keyboards/fingerpunch/fp_audio.c \
-        keyboards/fingerpunch/fp_keyhandler.c \
-        keyboards/fingerpunch/fp_pointing.c \
-        keyboards/fingerpunch/fp_rgb_common.c \
-        keyboards/fingerpunch/fp_rgblight.c \
-        keyboards/fingerpunch/fp_rgb_matrix.c
+SRC +=  features/repeat_key.c \
+				features/sentence_case.c
+# Smathev added from: https://getreuer.info/posts/keyboards/repeat-key/index.html 
+COMBO_ENABLE = yes
+
+# Smathev implemented from: https://docs.qmk.fm/#/feature_auto_shift
+AUTO_SHIFT_ENABLE = yes
+
+# Smathev implemented from: https://docs.qmk.fm/#/feature_caps_word?id=caps-word
+#CAPS_WORD_ENABLE = yes

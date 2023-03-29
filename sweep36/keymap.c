@@ -1,17 +1,28 @@
 #include QMK_KEYBOARD_H
 
+// https://github.com/qmk/qmk_firmware/blob/master/quantum/keymap_extras/keymap_danish.h
 #include "keymap_danish.h"
+
+
+#include "features/repeat_key.h"
+
+#include "features/sentence_case.h"
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
     _NORTO,
-    -NAVNUM,
+    _NAVNUM,
     _SYM,
     _QWERTY,
     _COLEMAK,
     _LOWER,
     _RAISE,
     _ADJUST
+};
+
+enum custom_keycodes {
+  REPEAT = SAFE_RANGE,
+  // Other custom keys...
 };
 
 // Define aliases
@@ -42,8 +53,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_NORTO] = LAYOUT_split_3x5_3(
   DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
   KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
-  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
-                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
+  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,  KC_W,     KC_K,   KC_Z,   KC_Q,
+                        SYM,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  NAVNUM
 ),
 
 /* NAV and Numbers
@@ -62,19 +73,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // 
 [_NAVNUM] = LAYOUT_split_3x5_3(
-  DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
-  KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
-  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
-                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
+  _______,	KC_PGUP,    KC_UP,    KC_HOME,	_______, _______, KC_7,     KC_8,   KC_9,   _______,
+  _______,	KC_LEFT,    KC_DOWN,  KC_RIGHT,	_______, _______, KC_4,     KC_5,   KC_6,   _______,
+  _______,     	KC_PGDN,    KC_V,     KC_END,  	_______, _______, KC_1,     KC_2,   KC_3,   _______,
+                _______, _______, _______,      _______, _______, _______
 ),
-/* Norto https://lykt.xyz/skl/norto/#da
+/* Symbols 
  *
  * ,----------------------------------.           ,----------------------------------.
- * |   Ø  |   Æ  |   U  |   G  |   J  |           |   B  |   F  |   L  |   H  |   X  |
+ * |   !  |   "  |   #  |      |   J  |           |   B  |   F  |   L  |   H  |   X  |
  * |------+------+------+------+------|           |------+------+------+------+------|
- * |   O  |   I  |   A  |   T  |   M  |           |   P  |   N  |   R  |   S  |   D  |
+ * |   ?  |   I  |   A  |   T  |   M  |           |   P  |   N  |   R  |   S  |   D  |
  * |------+------+------+------+------|           |------+------+------+------+------|
- * |      |   Y  |   Å  |   V  |   C  |           |   W  |   K  |   Z  |   Q  |      |
+ * |   <  |   >  |   Å  |   V  |   C  |           |   W  |   K  |   Z  |   Q  |      |
  * `----------------------------------'           `----------------------------------'
  *                  ,--------------------.    ,--------------------.
  *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
@@ -82,11 +93,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 // 
-[_NORTO] = LAYOUT_split_3x5_3(
-  DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
-  KC_O,     KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
-  KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
-                        LOWER,    KC_BSPC,  KC_E,     KC_SPC,   KC_LSFT,  RAISE
+[_SYM] = LAYOUT_split_3x5_3(
+  DK_EXLM, DK_DQUO,    DK_HASH,     KC_G,     KC_J,     KC_B,     KC_F,     KC_L,   KC_H,   KC_X,
+  DK_QUES, KC_I,       KC_A,     KC_T,     KC_M,     KC_P,     KC_N,     KC_R,   KC_S,   KC_D,
+  DK_LABK, DK_RABK,    KC_V,     KC_C,     KC_DOT,   KC_COMM,   KC_W,     KC_K,   KC_Z,   KC_Q,
+                        _______, _______, _______,      _______, _______, _______
 ),
 /* Qwerty
  *
@@ -259,3 +270,27 @@ bool oled_task_user(void) {
 }
 
 #endif
+
+// combo_t key_combos[] = {};
+
+// https://github.com/qmk/qmk_firmware/blob/master/docs/feature_combo.md
+
+const uint16_t PROGMEM tab_switch[] = {KC_U, KC_G, COMBO_END};
+const uint16_t PROGMEM os_copy[] = {DK_ARNG, KC_V, COMBO_END};
+const uint16_t PROGMEM os_cut[] = {DK_ARNG, KC_C, COMBO_END};
+const uint16_t PROGMEM os_paste[] = {DK_ARNG, KC_DOT, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+    //COMBO(tab_switch, LATL(KC_TAB)),
+    COMBO(os_copy, LCTL(KC_C)), // keycodes with modifiers are possible too!
+    COMBO(os_cut, LCTL(KC_X)), // keycodes with modifiers are possible too!
+    COMBO(os_paste, LCTL(KC_V)), // keycodes with modifiers are possible too!
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+  if (!process_repeat_key(keycode, record, REPEAT)) { return false; }
+  if (!process_sentence_case(keycode, record)) { return false; }
+  // Your macros ...
+
+  return true;
+}

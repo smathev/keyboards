@@ -53,14 +53,12 @@
 /* serial.c configuration for split keyboard */
 #define SOFT_SERIAL_PIN D2
 
-#ifdef ENCODER_ENABLE
-#define ENCODERS_PAD_A {D1}
-#define ENCODERS_PAD_B {D0}
-#define ENCODERS_PAD_A_RIGHT {D1}
-#define ENCODERS_PAD_B_RIGHT {D0}
-#endif
-
 #define MASTER_LEFT
+
+
+// Smathev - define combos
+#define COMBO_COUNT 25
+
 
 /* Backwards compatibility with existing out-of-tree keymaps */
 #define LAYOUT_sweeeeep LAYOUT_split_3x5_3
