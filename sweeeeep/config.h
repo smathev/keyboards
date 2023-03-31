@@ -62,3 +62,5 @@
 
 /* Backwards compatibility with existing out-of-tree keymaps */
 #define LAYOUT_sweeeeep LAYOUT_split_3x5_3
+
+#define TAPPING_TERM 200

@@ -15,6 +15,10 @@
  */
 #include "wrappers.h"
 #include "casemodes.h"
+#include "sentence_case.h"
+#include "repeat_key.h"
+#include "tapdance.h"
+#include "tapdance.c"
 #include QMK_KEYBOARD_H
 
 /*

@@ -62,6 +62,7 @@ enum userspace_custom_keycodes {
     G_GOD_OFF,
     G_PULLING,
     G_PUSH,
+    REPEAT,
     NEW_SAFE_RANGE
 };
 

@@ -2,10 +2,9 @@
 #include "smathev.h"
 #include "keymap_danish.h"
 
+//#include "features/repeat_key.h"
+//#include "features/sentence_case.h"
 
-#include "features/repeat_key.h"
-
-#include "features/sentence_case.h"
 /*
 Since our quirky block definitions are basically a list of comma separated
 arguments, we need a wrapper in order for these definitions to be
@@ -206,12 +205,12 @@ NOTE: These are all the same length.  If you do a search/replace
 #define __ALPHA_THUMBS_6__                                  __ALPHA_THUMBS_LEFT_3__, __ALPHA_THUMBS_RIGHT_3__
 
 
-#define __NORTO_THUMB_L1__ TG(_SYM)
-#define __NORTO_THUMB_L2__ KC_BSPC
+#define __NORTO_THUMB_L1__ KC_BSPC
+#define __NORTO_THUMB_L2__ KC_MINS
 #define __NORTO_THUMB_L3__ KC_E
 #define __NORTO_THUMB_R1__ KC_SPC
-#define __NORTO_THUMB_R2__ KC_LSFT
-#define __NORTO_THUMB_R3__ TG(_NAVNUM)
+#define __NORTO_THUMB_R2__ REPEAT 
+#define __NORTO_THUMB_R3__ KC_LSFT
 
 #define __NORTO_THUMBS_LEFT_2__                             __NORTO_THUMB_L2__, __NORTO_THUMB_L3__
 #define __NORTO_THUMBS_RIGHT_2__                            __NORTO_THUMB_R1__, __NORTO_THUMB_R2__
@@ -290,7 +289,7 @@ NOTE: These are all the same length.  If you do a search/replace
  * |------+------+------+------+------|           |------+------+------+------+------|
  * |   O  |   I  |   A  |   T  |   M  |           |   P  |   N  |   R  |   S  |   D  |
  * |------+------+------+------+------|           |------+------+------+------+------|
- * |      |   Y  |   Å  |   V  |   C  |           |   W  |   K  |   Z  |   Q  |      |
+ * |   Y  |   Å  |   V  |   C  |   ,  |           |   .  |   W  |   K  |   Z  |   Q  |
  * `----------------------------------'           `----------------------------------'
  *                  ,--------------------.    ,--------------------.
  *                  | LOWER| Enter|   '  |    |BckSpc| Space| RAISE|
@@ -298,12 +297,13 @@ NOTE: These are all the same length.  If you do a search/replace
  */
 
 // NORTO
-#define __________________NORTO_L1____________________ DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J     
-#define __________________NORTO_L2____________________ KC_O,     KC_I,       KC_A,     KC_T,     KC_M     
-#define __________________NORTO_L3____________________ KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_DOT   
-#define __________________NORTO_R1____________________ KC_B,     KC_F,       KC_L,     KC_H,     KC_X
-#define __________________NORTO_R2____________________ KC_P,     KC_N,       KC_R,     KC_S,     KC_D
-#define __________________NORTO_R3____________________ KC_COMM,  KC_W,       KC_K,     KC_Z,     KC_Q
+#define __________________NORTO_L1____________________      DK_OSTR,  DK_AE,      KC_U,     KC_G,     KC_J     
+#define __________________NORTO_L2____________________      KC_O,     KC_I,       KC_A,     KC_T,     KC_M     
+#define __________________NORTO_L3____________________      KC_Y,     DK_ARNG,    KC_V,     KC_C,     KC_COMMA   
+
+#define __________________NORTO_R1____________________      KC_B,     KC_F,       KC_L,     KC_H,     KC_X
+#define __________________NORTO_R2____________________      KC_P,     KC_N,       KC_R,     KC_S,     KC_D
+#define __________________NORTO_R3____________________      KC_DOT,   KC_W,       KC_K,     KC_Z,     KC_Q
 
 // ALPHA
 #define __________________ALPHA_L1____________________			KC_Q,    KC_W,    KC_F,    KC_P,    KC_B
@@ -362,6 +362,20 @@ NOTE: These are all the same length.  If you do a search/replace
 #define _________________NUMPAD_1__________________			__NUMPAD_1_K1__, __NUMPAD_1_K2__, __NUMPAD_1_K3__, __NUMPAD_1_K4__, __NUMPAD_1_K5__
 #define _________________NUMPAD_2__________________			__NUMPAD_2_K1__, __NUMPAD_2_K2__, __NUMPAD_2_K3__, __NUMPAD_2_K4__, __NUMPAD_2_K5__
 #define _________________NUMPAD_3__________________			__NUMPAD_3_K1__, __NUMPAD_3_K2__, __NUMPAD_3_K3__, __NUMPAD_3_K4__, __NUMPAD_3_K5__
+
+// SYMNORT
+
+#define __SYMNORT_L1_K1__ DK_EXLM
+#define __SYMNORT_L1_K2__ DK_DQUO
+#define __SYMNORT_L1_K3__ DK_HASH
+#define __SYMNORT_L1_K4__ KC_DLR
+#define __SYMNORT_L1_K5__ KC_PERC
+
+#define __SYMNORT_L2_K1__ KC_MINS
+#define __SYMNORT_L2_K2__ KC_LBRC
+#define __SYMNORT_L2_K3__ KC_LCBR
+#define __SYMNORT_L2_K4__ KC_LPRN
+#define __SYMNORT_L2_K5__ KC_LT
 
 // SYMBOLS
 

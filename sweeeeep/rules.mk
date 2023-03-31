@@ -42,5 +42,5 @@ COMBO_ENABLE = yes
 # Smathev implemented from: https://docs.qmk.fm/#/feature_auto_shift
 AUTO_SHIFT_ENABLE = yes
 
-# Smathev implemented from: https://docs.qmk.fm/#/feature_caps_word?id=caps-word
-#CAPS_WORD_ENABLE = yes
+# Implemented from  https://github.com/samhocevar-forks/qmk-firmware/blob/master/docs/feature_tap_dance.md
+TAP_DANCE_ENABLE = yes
